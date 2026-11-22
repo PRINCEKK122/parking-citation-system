@@ -37,6 +37,34 @@ npm run dev            # web app at http://localhost:5173
 npm run dev:api        # API at http://localhost:4000/health
 ```
 
+## Running the frontend without a backend
+
+With `VITE_USE_MOCKS=true` (the default in `.env.example`), a service worker in the browser
+answers every `/api` and gateway call from synthetic data, so the whole UI works with no API,
+database or gateway running. The footer says when mocks are on. The handlers live in
+`apps/web/src/mocks/` and the tests check every mocked response against the shared schemas.
+
+| To see                          | Enter                                                                        |
+| ------------------------------- | ---------------------------------------------------------------------------- |
+| `found`                         | `ABC1234` + MO (2 citations), VIN `1HGCM82633A004352`, or `T00012345`        |
+| `near_match`                    | `A8C1234` + MO (suggests ABC1234)                                            |
+| `no_open_citations`             | `XYZ789` + IL, or VIN `1M8GDM9AXKP042788`                                    |
+| `unknown_identifier`            | any other valid input, e.g. `QQQ999` + MO                                    |
+| `invalid_format`                | `1HGCM82643A004352` (check digit), a 16-character VIN, a plate with no state |
+| 429 / 500                       | `RATELIM` + MO / `ERROR500` + MO                                             |
+| 409 `amount_changed` at payment | `FEE2026` + MO (a late fee lands between lookup and payment)                 |
+
+| Test card          | Result                          |
+| ------------------ | ------------------------------- |
+| `4242424242424242` | Succeeds after two status polls |
+| `4000000000000002` | Declined                        |
+| `4000000000000119` | Gateway error                   |
+| `4000000000000077` | Succeeds after six polls        |
+
+Any future expiry date and any 3-digit CVC work. Accounts: `resident@example.com` /
+`resident-pass-123` and `staff@example.com` / `staff-pass-1234`. Ticket `T00030001` is already
+paid online, so recording a mail payment for it shows the 409 from user story US3.
+
 ## Scripts
 
 | Command                 | Does                                             |

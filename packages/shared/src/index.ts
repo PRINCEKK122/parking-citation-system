@@ -4,4 +4,6 @@ export * from "./identifiers.js";
 export * from "./lookup.js";
 export * from "./payments.js";
 export * from "./staff.js";
+export * from "./account.js";
+export * from "./gateway.js";
 export * from "./errors.js";

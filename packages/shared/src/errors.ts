@@ -13,6 +13,10 @@ export const apiErrorCodes = [
   "amount_changed",
   /** 422: an Idempotency-Key was reused with a different request body. */
   "idempotency_key_reused",
+  /** 409: registering with an email that already has an account. */
+  "email_taken",
+  /** 409: voiding a payment that did not succeed or is already voided. */
+  "payment_not_voidable",
   "internal",
 ] as const;
 export const apiErrorCodeSchema = z.enum(apiErrorCodes);

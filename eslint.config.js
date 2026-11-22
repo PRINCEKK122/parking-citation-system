@@ -6,7 +6,15 @@ import globals from "globals";
 import prettier from "eslint-config-prettier";
 
 export default tseslint.config(
-  { ignores: ["**/dist/**", "**/coverage/**", "**/node_modules/**", "**/playwright-report/**"] },
+  {
+    ignores: [
+      "**/dist/**",
+      "**/coverage/**",
+      "**/node_modules/**",
+      "**/playwright-report/**",
+      "**/mockServiceWorker.js",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

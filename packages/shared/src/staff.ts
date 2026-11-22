@@ -22,3 +22,10 @@ export const voidPaymentRequestSchema = z.object({
   reason: z.string().trim().min(1, "Say why this payment is being voided.").max(200),
 });
 export type VoidPaymentRequest = z.infer<typeof voidPaymentRequestSchema>;
+
+/** 200 response to a void. The citation is open again and can be paid. */
+export const voidPaymentResponseSchema = z.object({
+  paymentId: idSchema,
+  citationStatus: z.literal("open"),
+});
+export type VoidPaymentResponse = z.infer<typeof voidPaymentResponseSchema>;

@@ -201,6 +201,12 @@ main:focus {
   font-size: var(--text-sm);
 }
 
+.mock-note {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
 /* ---------- Building blocks for later cards ---------- */
 
 .card {

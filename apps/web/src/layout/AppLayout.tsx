@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router";
+import { config } from "../config.js";
 
 const NAV = [
   { to: "/", label: "Find a citation", end: true },
@@ -63,6 +64,11 @@ export function AppLayout() {
             Demonstration system for CSCI 5360. All citations are synthetic and only test cards are
             accepted. Not affiliated with any city.
           </p>
+          {config.useMocks ? (
+            <p className="mock-note">
+              Running on mock data in your browser; nothing is sent to a server.
+            </p>
+          ) : null}
         </div>
       </footer>
     </div>
