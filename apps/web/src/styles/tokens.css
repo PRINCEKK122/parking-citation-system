@@ -1,0 +1,81 @@
+/*
+ * Design tokens. Components use these variables only, never raw colors or sizes.
+ * Text colors meet WCAG AA (4.5:1) on both --surface and --bg, in light and dark.
+ */
+:root {
+  color-scheme: light;
+
+  /* Color */
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --surface-2: #f6f7f9;
+  --line: #cfd6e0;
+  --fg: #19202c;
+  --muted: #4f5a6c;
+  --brand: #f2b705; /* citation-envelope yellow; decoration only, never text on white */
+  --brand-ink: #19202c;
+  --link: #1f4fb8;
+  --primary: #1f4fb8;
+  --primary-ink: #ffffff;
+  --focus: #1f4fb8;
+  --danger: #b3261e;
+  --danger-bg: #fdecea;
+  --success: #17703d;
+  --success-bg: #e6f4ea;
+  --warning: #8a5300;
+  --warning-bg: #fff4dc;
+
+  /* Type: system fonts load instantly on a phone */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: clamp(1.625rem, 1.3rem + 1.4vw, 2.125rem);
+  --leading: 1.5;
+
+  /* Space (4px scale) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* Shape */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --shadow: 0 1px 2px rgb(25 32 44 / 0.08), 0 1px 1px rgb(25 32 44 / 0.04);
+
+  /* Layout */
+  --content-max: 44rem;
+  --gutter: var(--space-4);
+  --tap: 44px; /* minimum touch target */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #11151c;
+    --surface: #1a2029;
+    --surface-2: #212834;
+    --line: #364154;
+    --fg: #e6eaf1;
+    --muted: #a3adbd;
+    --brand: #f5c638;
+    --brand-ink: #11151c;
+    --link: #8fb0ff;
+    --primary: #8fb0ff;
+    --primary-ink: #0d1320;
+    --focus: #8fb0ff;
+    --danger: #ff8a80;
+    --danger-bg: #3a1d1b;
+    --success: #6fd394;
+    --success-bg: #16301f;
+    --warning: #f2c36b;
+    --warning-bg: #332712;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  }
+}
