@@ -23,7 +23,7 @@ export function AppLayout() {
       return;
     }
     mainRef.current?.querySelector<HTMLElement>("h1")?.focus();
-  }, [location.pathname]);
+  }, [location.key]);
 
   return (
     <div className="app">

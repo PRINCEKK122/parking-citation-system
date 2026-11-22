@@ -1,8 +1,10 @@
 import type { RouteObject } from "react-router";
 import { AppLayout } from "./layout/AppLayout.js";
 import { RouteError } from "./layout/RouteError.js";
+import { AppLoading } from "./layout/AppLoading.js";
 import { LookupPage } from "./pages/LookupPage.js";
-import { ResultsPage } from "./pages/ResultsPage.js";
+import { ResultsPage } from "./pages/results/ResultsPage.js";
+import { resultsLoader } from "./pages/results/loader.js";
 import { CheckoutPage } from "./pages/CheckoutPage.js";
 import { PaymentStatusPage } from "./pages/PaymentStatusPage.js";
 import { SignInPage } from "./pages/SignInPage.js";
@@ -10,26 +12,21 @@ import { AccountPage } from "./pages/AccountPage.js";
 import { StaffPage } from "./pages/StaffPage.js";
 import { NotFoundPage } from "./pages/NotFoundPage.js";
 
-/** URL builders, so pages never hand-assemble paths. */
-export const paths = {
-  lookup: () => "/",
-  results: (q: string, state?: string) =>
-    `/results?${new URLSearchParams(state ? { q, state } : { q }).toString()}`,
-  checkout: (citationId: string) => `/pay/${encodeURIComponent(citationId)}`,
-  paymentStatus: (paymentId: string) => `/payments/${encodeURIComponent(paymentId)}`,
-  signIn: () => "/sign-in",
-  account: () => "/account",
-  staff: () => "/staff",
-};
+export { paths } from "./paths.js";
 
 export const routes: RouteObject[] = [
   {
     path: "/",
     element: <AppLayout />,
     errorElement: <RouteError />,
+    hydrateFallbackElement: <AppLoading />,
     children: [
       { index: true, element: <LookupPage /> },
-      { path: "results", element: <ResultsPage /> },
+      {
+        path: "results",
+        element: <ResultsPage />,
+        loader: resultsLoader,
+      },
       { path: "pay/:citationId", element: <CheckoutPage /> },
       { path: "payments/:paymentId", element: <PaymentStatusPage /> },
       { path: "sign-in", element: <SignInPage /> },

@@ -50,6 +50,8 @@ interface RequestOptions {
   headers?: Record<string, string>;
   /** Non-2xx statuses whose body is a normal response, e.g. 422 from lookup. */
   alsoOk?: number[];
+  /** Cancels the request, e.g. when the user starts a new search before this one returns. */
+  signal?: AbortSignal;
 }
 
 /** Resolve against the page origin; Node's fetch (used in tests) rejects relative URLs. */
@@ -68,8 +70,10 @@ async function send(url: string, opts: RequestOptions): Promise<Response> {
         ...opts.headers,
       },
       body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
+      signal: opts.signal,
     });
-  } catch {
+  } catch (e) {
+    if (opts.signal?.aborted) throw e;
     throw new ApiRequestError(
       0,
       "network_error",
@@ -117,12 +121,15 @@ async function request<S extends z.ZodType>(
 
 // ---------- Lookup ----------
 
-export function lookup(query: LookupQuery) {
+export function lookup(query: LookupQuery, signal?: AbortSignal) {
   const params = new URLSearchParams({
     q: query.q,
     ...(query.state ? { state: query.state } : {}),
   });
-  return request(`/api/lookup?${params.toString()}`, lookupResponseSchema, { alsoOk: [422] });
+  return request(`/api/lookup?${params.toString()}`, lookupResponseSchema, {
+    alsoOk: [422],
+    signal,
+  });
 }
 
 // ---------- Payments ----------

@@ -1,25 +1,15 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { setupServer } from "msw/node";
+import { describe, expect, it } from "vitest";
 import type { PaymentRequest, PaymentStatus, StateCode } from "@pcs/shared";
 import * as api from "../api/client.js";
-import { config } from "../config.js";
 import { MOCK_INPUTS, POLLS_TO_SETTLE } from "./fixtures.js";
-import { createMockApi } from "./handlers.js";
+import { serveMockApi } from "../test/mockApi.js";
 
 /**
  * Drives the mock API through the real client, so every mocked response is also checked
  * against the shared schemas. If a handler drifts from the contract, these tests fail.
  */
 
-const server = setupServer();
-let mock: ReturnType<typeof createMockApi>;
-
-beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
-beforeEach(() => {
-  mock = createMockApi({ gatewayUrl: config.gatewayUrl });
-  server.resetHandlers(...mock.handlers);
-});
-afterAll(() => server.close());
+const mock = serveMockApi();
 
 const payer: PaymentRequest["payer"] = {
   name: "Jordan Lee",
