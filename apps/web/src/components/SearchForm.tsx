@@ -13,6 +13,7 @@ import {
   type StateCode,
 } from "@pcs/shared";
 import { paths } from "../paths.js";
+import { StateCombobox } from "./StateCombobox.js";
 
 interface SearchFormProps {
   defaultQuery?: string;
@@ -49,12 +50,12 @@ export function SearchForm({
   const navigate = useNavigate();
   const navigation = useNavigation();
   const [query, setQuery] = useState(defaultQuery);
-  const [state, setState] = useState(isStateCode(defaultState) ? defaultState : "");
+  const [state, setState] = useState<StateCode | "">(isStateCode(defaultState) ? defaultState : "");
   const [error, setError] = useState<InvalidFormatReason | null>(initialError ?? null);
   /** After the first failed attempt, re-check on every change so the error clears as soon as it's fixed. */
   const [touched, setTouched] = useState(Boolean(initialError));
   const queryRef = useRef<HTMLInputElement>(null);
-  const stateRef = useRef<HTMLSelectElement>(null);
+  const stateRef = useRef<HTMLInputElement>(null);
 
   const id = useId();
   const ids = {
@@ -156,27 +157,17 @@ export function SearchForm({
         <label htmlFor={ids.state}>
           Plate state <span className="field__optional">(license plates only)</span>
         </label>
-        {/* Card S1-08 replaces this with a combo box that matches "MO" to Missouri first. */}
-        <select
+        <StateCombobox
           id={ids.state}
-          ref={stateRef}
-          name="state"
+          inputRef={stateRef}
           value={state}
-          onChange={(e) => {
-            setState(e.target.value);
-            revalidate(query, e.target.value);
+          onChange={(code) => {
+            setState(code);
+            revalidate(query, code);
           }}
           aria-invalid={stateError ? true : undefined}
           aria-describedby={stateError ? `${ids.state}-err` : undefined}
-          className="input"
-        >
-          <option value="">Choose a state</option>
-          {US_STATES.map(([code, name]) => (
-            <option key={code} value={code}>
-              {name} ({code})
-            </option>
-          ))}
-        </select>
+        />
         {stateError ? (
           <p id={`${ids.state}-err`} className="field__error">
             {invalidFormatMessages.missing_state}

@@ -9,13 +9,13 @@ import { findHeading, renderApp } from "../test/renderApp.js";
 serveMockApi();
 
 const field = () => screen.getByLabelText("Ticket number, license plate, or VIN");
-const stateSelect = () => screen.getByLabelText(/Plate state/);
+const stateField = () => screen.getByRole("combobox", { name: /Plate state/ });
 
 async function search(q: string, state?: string) {
   const app = renderApp("/");
   await findHeading("Find your parking citation");
   await app.user.type(field(), q);
-  if (state) await app.user.selectOptions(stateSelect(), state);
+  if (state) await app.user.type(stateField(), state);
   await app.user.click(screen.getByRole("button", { name: "Search" }));
   return app;
 }
@@ -40,14 +40,14 @@ describe("inline format errors, before any request", () => {
   it("asks for the state when a plate has none, and moves focus to the state field", async () => {
     await search("ABC1234");
     expect(await screen.findByText(invalidFormatMessages.missing_state)).toBeTruthy();
-    expect(stateSelect().getAttribute("aria-invalid")).toBe("true");
-    expect(document.activeElement).toBe(stateSelect());
+    expect(stateField().getAttribute("aria-invalid")).toBe("true");
+    expect(document.activeElement).toBe(stateField());
   });
 
   it("clears the error as soon as the entry is fixed", async () => {
     const { user } = await search("ABC1234");
     await screen.findByText(invalidFormatMessages.missing_state);
-    await user.selectOptions(stateSelect(), "MO");
+    await user.type(stateField(), "MO{Enter}");
     expect(screen.queryByText(invalidFormatMessages.missing_state)).toBeNull();
   });
 
@@ -93,7 +93,7 @@ describe("the five outcomes each have their own screen", () => {
     await user.click(screen.getByRole("link", { name: "No, change what I entered" }));
     await findHeading("Find your parking citation");
     expect((field() as HTMLInputElement).value).toBe("A8C1234");
-    expect((stateSelect() as HTMLSelectElement).value).toBe("MO");
+    expect((stateField() as HTMLInputElement).value).toBe("Missouri (MO)");
   });
 
   it("no open citations: says the vehicle is known and owes nothing", async () => {

@@ -438,3 +438,44 @@ input.input.mono {
   flex-direction: column;
   gap: var(--space-2);
 }
+
+/* ---------- State combo box ---------- */
+
+.combo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.combo__list {
+  max-height: 15rem;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  border: 1px solid var(--muted);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.combo__option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.combo__option[aria-selected="true"] {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+.combo__code {
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+.combo__empty {
+  padding: var(--space-2) var(--space-3);
+  color: var(--muted);
+}
