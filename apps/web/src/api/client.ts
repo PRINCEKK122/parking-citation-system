@@ -2,6 +2,7 @@ import type { z } from "zod";
 import {
   IDEMPOTENCY_KEY_HEADER,
   apiErrorSchema,
+  checkoutCitationSchema,
   lookupResponseSchema,
   paymentAcceptedSchema,
   paymentHistoryItemSchema,
@@ -133,6 +134,9 @@ export function lookup(query: LookupQuery, signal?: AbortSignal) {
 }
 
 // ---------- Payments ----------
+
+export const getCitation = (citationId: string, signal?: AbortSignal) =>
+  request(`/api/citations/${encodeURIComponent(citationId)}`, checkoutCitationSchema, { signal });
 
 export function createPayment(body: PaymentRequest, idempotencyKey: string) {
   return request("/api/payments", paymentAcceptedSchema, {

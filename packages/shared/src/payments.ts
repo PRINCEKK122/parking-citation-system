@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { idSchema, positiveCentsSchema, timestampSchema } from "./common.js";
+import { citationSummarySchema } from "./lookup.js";
 import { stateCodeSchema } from "./identifiers.js";
 
 /** Payment lifecycle (feature F2). `succeeded` and `failed` are terminal and never change. */
@@ -26,7 +27,7 @@ export const payerSchema = z.object({
     line1: z.string().trim().min(1, "Enter a street address.").max(120),
     line2: z.string().trim().max(120).optional(),
     city: z.string().trim().min(1, "Enter a city.").max(80),
-    state: stateCodeSchema,
+    state: z.enum(stateCodeSchema.options, { error: "Choose a state." }),
     postalCode: z
       .string()
       .trim()
@@ -68,18 +69,25 @@ export const paymentFailureReasonSchema = z.enum(paymentFailureReasons);
 export type PaymentFailureReason = z.infer<typeof paymentFailureReasonSchema>;
 
 /** GET /api/payments/:id. The client polls until the state is terminal. */
+const statusBase = { paymentId: idSchema, citationId: idSchema };
 export const paymentStatusSchema = z.discriminatedUnion("state", [
-  z.object({ paymentId: idSchema, state: z.literal("created") }),
-  z.object({ paymentId: idSchema, state: z.literal("processing") }),
-  z.object({ paymentId: idSchema, state: z.literal("succeeded"), receipt: receiptSchema }),
-  z.object({
-    paymentId: idSchema,
-    state: z.literal("failed"),
-    reason: paymentFailureReasonSchema,
-  }),
+  z.object({ ...statusBase, state: z.literal("created") }),
+  z.object({ ...statusBase, state: z.literal("processing") }),
+  z.object({ ...statusBase, state: z.literal("succeeded"), receipt: receiptSchema }),
+  z.object({ ...statusBase, state: z.literal("failed"), reason: paymentFailureReasonSchema }),
 ]);
 export type PaymentStatus = z.infer<typeof paymentStatusSchema>;
 
 export function isTerminal(state: PaymentState): boolean {
   return state === "succeeded" || state === "failed";
 }
+
+/**
+ * GET /api/citations/:id, for the checkout page. `payable` is false when the citation is
+ * paid, voided, or already has a payment in progress.
+ */
+export const checkoutCitationSchema = z.object({
+  citation: citationSummarySchema,
+  payable: z.boolean(),
+});
+export type CheckoutCitation = z.infer<typeof checkoutCitationSchema>;

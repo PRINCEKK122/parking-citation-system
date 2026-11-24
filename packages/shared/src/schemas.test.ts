@@ -138,9 +138,9 @@ describe("paymentStatusSchema", () => {
       paidAt: "2026-11-22T15:00:00Z",
     };
     for (const s of [
-      { paymentId: PAYMENT_ID, state: "processing" },
-      { paymentId: PAYMENT_ID, state: "succeeded", receipt },
-      { paymentId: PAYMENT_ID, state: "failed", reason: "card_declined" },
+      { paymentId: PAYMENT_ID, citationId: CITATION_ID, state: "processing" },
+      { paymentId: PAYMENT_ID, citationId: CITATION_ID, state: "succeeded", receipt },
+      { paymentId: PAYMENT_ID, citationId: CITATION_ID, state: "failed", reason: "card_declined" },
     ]) {
       expect(paymentStatusSchema.safeParse(s).success).toBe(true);
     }
@@ -148,11 +148,19 @@ describe("paymentStatusSchema", () => {
 
   it("rejects succeeded without a receipt and failed without a reason", () => {
     expect(
-      paymentStatusSchema.safeParse({ paymentId: PAYMENT_ID, state: "succeeded" }).success,
+      paymentStatusSchema.safeParse({
+        paymentId: PAYMENT_ID,
+        citationId: CITATION_ID,
+        state: "succeeded",
+      }).success,
     ).toBe(false);
-    expect(paymentStatusSchema.safeParse({ paymentId: PAYMENT_ID, state: "failed" }).success).toBe(
-      false,
-    );
+    expect(
+      paymentStatusSchema.safeParse({
+        paymentId: PAYMENT_ID,
+        citationId: CITATION_ID,
+        state: "failed",
+      }).success,
+    ).toBe(false);
   });
 });
 

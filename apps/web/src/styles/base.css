@@ -524,3 +524,69 @@ input.input.mono {
   padding: var(--space-2) var(--space-3);
   color: var(--muted);
 }
+
+/* ---------- Checkout ---------- */
+
+.checkout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+fieldset {
+  min-width: 0;
+  margin: 0;
+}
+legend {
+  float: left; /* keeps the legend inside the card's padding */
+  width: 100%;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+legend + * {
+  clear: both;
+}
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--space-3);
+}
+.input--short {
+  max-width: 10rem;
+}
+.btn--block {
+  width: 100%;
+  font-size: var(--text-lg);
+}
+.alert {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  border-left: 5px solid currentColor;
+}
+.alert p {
+  color: var(--fg);
+}
+.alert--error {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+.alert--warn {
+  color: var(--warning);
+  background: var(--warning-bg);
+}
+.test-cards {
+  padding: var(--space-3);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+.test-cards summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.test-cards ul {
+  padding-left: var(--space-5);
+}

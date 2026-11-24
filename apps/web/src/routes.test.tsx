@@ -11,7 +11,7 @@ describe("routes", () => {
     [paths.lookup(), "Find your parking citation"],
     [paths.results("ABC1234", "MO"), "2 open citations"],
     ["/results", "No search entered"],
-    [paths.checkout("3f1c2a9e-8b4d-4c3a-9f2e-1a2b3c4d5e6f"), "Pay your citation"],
+    [paths.checkout("5c0d7e1a-3b2f-4d6a-8e90-000000000001"), "Pay your citation"],
     [paths.paymentStatus("8d2e4b6a-1c3f-4e5d-a7b9-0c1d2e3f4a5b"), "Payment status"],
     [paths.signIn(), "Sign in"],
     [paths.account(), "Your account"],

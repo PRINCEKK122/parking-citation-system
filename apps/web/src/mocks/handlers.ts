@@ -204,6 +204,7 @@ export function createMockApi({ gatewayUrl, session = memorySession() }: MockApi
       const c = db.citations.find((x) => x.id === p.citationId)!;
       return {
         paymentId: p.id,
+        citationId: p.citationId,
         state: "succeeded",
         receipt: {
           paymentId: p.id,
@@ -218,11 +219,16 @@ export function createMockApi({ gatewayUrl, session = memorySession() }: MockApi
     if (p.state === "failed") {
       return {
         paymentId: p.id,
+        citationId: p.citationId,
         state: "failed",
         reason: p.outcome === "declined" ? "card_declined" : "gateway_error",
       };
     }
-    return { paymentId: p.id, state: p.state === "created" ? "created" : "processing" };
+    return {
+      paymentId: p.id,
+      citationId: p.citationId,
+      state: p.state === "created" ? "created" : "processing",
+    };
   }
 
   /** Each poll stands in for time passing at the gateway. */
@@ -266,6 +272,14 @@ export function createMockApi({ gatewayUrl, session = memorySession() }: MockApi
       return result instanceof Response
         ? result
         : HttpResponse.json(result.body, { status: result.status });
+    }),
+
+    // ---------- Citation for checkout ----------
+    http.get("/api/citations/:id", async ({ params }) => {
+      await delay();
+      const c = db.citations.find((x) => x.id === params.id);
+      if (!c) return fail(404, "not_found", "No such citation.");
+      return HttpResponse.json({ citation: summary(c), payable: isPayable(c) });
     }),
 
     // ---------- Payments ----------

@@ -5,7 +5,8 @@ import { AppLoading } from "./layout/AppLoading.js";
 import { LookupPage } from "./pages/LookupPage.js";
 import { ResultsPage } from "./pages/results/ResultsPage.js";
 import { resultsLoader } from "./pages/results/loader.js";
-import { CheckoutPage } from "./pages/CheckoutPage.js";
+import { CheckoutPage } from "./pages/checkout/CheckoutPage.js";
+import { checkoutLoader } from "./pages/checkout/loader.js";
 import { PaymentStatusPage } from "./pages/PaymentStatusPage.js";
 import { SignInPage } from "./pages/SignInPage.js";
 import { AccountPage } from "./pages/AccountPage.js";
@@ -27,7 +28,7 @@ export const routes: RouteObject[] = [
         element: <ResultsPage />,
         loader: resultsLoader,
       },
-      { path: "pay/:citationId", element: <CheckoutPage /> },
+      { path: "pay/:citationId", element: <CheckoutPage />, loader: checkoutLoader },
       { path: "payments/:paymentId", element: <PaymentStatusPage /> },
       { path: "sign-in", element: <SignInPage /> },
       { path: "account", element: <AccountPage /> },
