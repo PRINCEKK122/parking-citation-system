@@ -1,11 +1,16 @@
 import { useEffect, useRef } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router";
+import { Form, Link, NavLink, Outlet, useLocation } from "react-router";
+import type { SessionUser } from "@pcs/shared";
 import { config } from "../config.js";
+import { useSessionUser } from "../session.js";
 
-const NAV = [
-  { to: "/", label: "Find a citation", end: true },
-  { to: "/sign-in", label: "Sign in", end: false },
-];
+/** Navigation depends on who is signed in: guests, residents and staff each see their own. */
+function navFor(user: SessionUser | null) {
+  if (user?.role === "staff") return [{ to: "/staff", label: "Staff console", end: false }];
+  const find = { to: "/", label: "Find a citation", end: true };
+  if (user?.role === "resident") return [find, { to: "/account", label: "My account", end: false }];
+  return [find, { to: "/sign-in", label: "Sign in", end: false }];
+}
 
 /**
  * Header, main region and footer shared by every page. After each client-side navigation,
@@ -14,6 +19,7 @@ const NAV = [
  */
 export function AppLayout() {
   const location = useLocation();
+  const user = useSessionUser();
   const mainRef = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
 
@@ -42,13 +48,22 @@ export function AppLayout() {
           </Link>
           <nav aria-label="Main">
             <ul className="nav">
-              {NAV.map((item) => (
+              {navFor(user).map((item) => (
                 <li key={item.to}>
                   <NavLink to={item.to} end={item.end} className="nav__link">
                     {item.label}
                   </NavLink>
                 </li>
               ))}
+              {user ? (
+                <li>
+                  <Form method="post" action="/sign-out">
+                    <button type="submit" className="nav__link nav__button">
+                      Sign out
+                    </button>
+                  </Form>
+                </li>
+              ) : null}
             </ul>
           </nav>
         </div>

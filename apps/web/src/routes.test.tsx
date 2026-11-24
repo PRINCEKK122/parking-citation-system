@@ -14,7 +14,7 @@ describe("routes", () => {
     [paths.checkout("5c0d7e1a-3b2f-4d6a-8e90-000000000001"), "Pay your citation"],
     [paths.paymentStatus("8d2e4b6a-1c3f-4e5d-a7b9-0c1d2e3f4a5b"), "Payment not found"],
     [paths.signIn(), "Sign in"],
-    [paths.account(), "Your account"],
+    [paths.account(), "Sign in"], // guests are sent to sign in
     [paths.staff(), "Staff console"],
     ["/no/such/page", "Page not found"],
   ])("%s renders its page with a matching title", async (path, title) => {
