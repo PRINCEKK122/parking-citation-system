@@ -8,7 +8,8 @@ import {
 import type { ClientErrorCode } from "../../api/client.js";
 import { Page } from "../../components/Page.js";
 import { SearchForm } from "../../components/SearchForm.js";
-import { describeIdentifier, formatCents, formatDate, kindName } from "../../lib/format.js";
+import { CitationCard } from "../../components/CitationCard.js";
+import { describeIdentifier, formatCents, kindName } from "../../lib/format.js";
 import { paths } from "../../paths.js";
 
 type Outcome<O extends LookupResponse["outcome"]> = Extract<LookupResponse, { outcome: O }>;
@@ -31,25 +32,30 @@ function Status({
 
 export function FoundView({ result }: { result: Outcome<"found"> }) {
   const n = result.citations.length;
+  const total = result.citations.reduce((sum, c) => sum + c.amountCents, 0);
   return (
     <Page
       title={n === 1 ? "1 open citation" : `${n} open citations`}
       lead={<>For {describeIdentifier(result.identifier)}.</>}
     >
       <Status tone="info" label="Citations found" />
-      {/* Card S1-09 adds the full fee breakdown and the next-increase date. */}
+      {n > 1 ? (
+        <p className="summary">
+          <span>
+            Total for all {n}: <strong>{formatCents(total)}</strong>.
+          </span>{" "}
+          Each citation is paid separately. Choose one to start.
+        </p>
+      ) : null}
       <ul className="citations">
         {result.citations.map((c) => (
-          <li key={c.id} className="card citation">
-            <div>
-              <p className="citation__no mono">{c.ticketNo}</p>
-              <p className="meta">Issued {formatDate(c.issuedAt)}</p>
-            </div>
-            <p className="citation__total">{formatCents(c.amountCents)}</p>
-            <Link className="btn btn--primary" to={paths.checkout(c.id)}>
-              Pay {formatCents(c.amountCents)}{" "}
-              <span className="sr-only">for ticket {c.ticketNo}</span>
-            </Link>
+          <li key={c.id}>
+            <CitationCard citation={c}>
+              <Link className="btn btn--primary" to={paths.checkout(c.id)}>
+                Pay {formatCents(c.amountCents)}{" "}
+                <span className="sr-only">for ticket {c.ticketNo}</span>
+              </Link>
+            </CitationCard>
           </li>
         ))}
       </ul>

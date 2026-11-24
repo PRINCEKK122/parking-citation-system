@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cleanup, screen, within } from "@testing-library/react";
+import { cleanup, screen } from "@testing-library/react";
 import { invalidFormatMessages } from "@pcs/shared";
 import { serveMockApi } from "../test/mockApi.js";
 import { findHeading, renderApp } from "../test/renderApp.js";
@@ -67,10 +67,9 @@ describe("the five outcomes each have their own screen", () => {
     await search("abc 1234", "MO");
     await findHeading("2 open citations");
     expect(screen.getByText("Citations found")).toBeTruthy();
-    const items = screen.getAllByRole("listitem").filter((li) => li.classList.contains("citation"));
-    expect(items.map((li) => within(li).getByText(/^T\d+$/).textContent)).toEqual([
-      "T00012345",
-      "T00012346",
+    expect(screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent)).toEqual([
+      "Ticket T00012345",
+      "Ticket T00012346",
     ]);
     expect(screen.getByRole("link", { name: "Pay $55.00 for ticket T00012345" })).toBeTruthy();
   });

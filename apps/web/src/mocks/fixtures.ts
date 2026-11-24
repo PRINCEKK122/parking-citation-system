@@ -123,7 +123,7 @@ export const CITATIONS: MockCitation[] = [
     issuedAt: "2026-10-22T14:10:00Z",
     baseCents: 2500,
     lateFeeCents: 0,
-    nextIncreaseAt: "2026-11-22T06:00:00Z",
+    nextIncreaseAt: "2026-12-01T06:00:00Z",
     status: "open",
     amountAtPaymentCents: 3500,
   },
