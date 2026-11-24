@@ -14,7 +14,8 @@ import { registerAction, signInAction, signOutAction } from "./pages/auth/action
 import { AccountPage } from "./pages/account/AccountPage.js";
 import { accountAction, accountLoader } from "./pages/account/data.js";
 import { ROOT_ROUTE_ID, rootLoader, rootShouldRevalidate } from "./session.js";
-import { StaffPage } from "./pages/StaffPage.js";
+import { StaffPage } from "./pages/staff/StaffPage.js";
+import { staffAction, staffLoader } from "./pages/staff/data.js";
 import { NotFoundPage } from "./pages/NotFoundPage.js";
 
 export { paths } from "./paths.js";
@@ -41,7 +42,7 @@ export const routes: RouteObject[] = [
       { path: "register", element: <RegisterPage />, action: registerAction },
       { path: "sign-out", action: signOutAction },
       { path: "account", element: <AccountPage />, loader: accountLoader, action: accountAction },
-      { path: "staff", element: <StaffPage /> },
+      { path: "staff", element: <StaffPage />, loader: staffLoader, action: staffAction },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

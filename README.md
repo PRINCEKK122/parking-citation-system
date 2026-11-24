@@ -63,7 +63,9 @@ database or gateway running. The footer says when mocks are on. The handlers liv
 
 Any future expiry date and any 3-digit CVC work. Accounts: `resident@example.com` /
 `resident-pass-123` and `staff@example.com` / `staff-pass-1234`. Ticket `T00030001` is already
-paid online, so recording a mail payment for it shows the 409 from user story US3.
+paid online, so the staff console won't offer to record a payment for it. To see the 409 from user
+story US3, search `T00050001` in the staff console and record a check: the mock pays it online at
+that moment, as if a resident beat the clerk to it.
 
 ## Scripts
 

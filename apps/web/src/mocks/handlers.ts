@@ -485,6 +485,21 @@ export function createMockApi({ gatewayUrl, session = memorySession() }: MockApi
         return fail(400, "validation_failed", "Check the payment details.", body.error.issues);
       const c = db.citations.find((x) => x.id === body.data.citationId);
       if (!c) return fail(404, "not_found", "No such citation.");
+      if (c.paidOnlineWhenStaffRecord) {
+        // Simulate the US3 race: an online payment lands just before the clerk's request.
+        delete c.paidOnlineWhenStaffRecord;
+        db.payments.push({
+          id: crypto.randomUUID(),
+          citationId: c.id,
+          amountCents: payableCents(c),
+          channel: "online",
+          state: "succeeded",
+          createdAt: now(),
+          paidAt: now(),
+          polls: 0,
+        });
+        c.status = "paid";
+      }
       if (!isPayable(c)) {
         db.audit.push({
           at: now(),

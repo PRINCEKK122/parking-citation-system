@@ -27,6 +27,8 @@ export interface MockCitation {
   status: CitationStatus;
   /** Set when a late fee lands between lookup and payment, to trigger 409 amount_changed. */
   amountAtPaymentCents?: number;
+  /** Paid online the moment staff try to record a payment, to show the US3 race and its 409. */
+  paidOnlineWhenStaffRecord?: boolean;
 }
 
 export interface MockPayment {
@@ -72,6 +74,10 @@ export const VEHICLES: MockVehicle[] = [
   {
     id: "0b6f6a52-1f6e-4c1e-9a43-000000000005",
     identifiers: [{ kind: "plate", value: "FEE2026", state: "MO" }],
+  },
+  {
+    id: "0b6f6a52-1f6e-4c1e-9a43-000000000006",
+    identifiers: [{ kind: "plate", value: "RACE001", state: "MO" }],
   },
 ];
 
@@ -126,6 +132,17 @@ export const CITATIONS: MockCitation[] = [
     nextIncreaseAt: "2026-12-01T06:00:00Z",
     status: "open",
     amountAtPaymentCents: 3500,
+  },
+  {
+    id: "5c0d7e1a-3b2f-4d6a-8e90-000000000006",
+    ticketNo: "T00050001",
+    vehicleId: "0b6f6a52-1f6e-4c1e-9a43-000000000006",
+    issuedAt: "2026-11-03T15:00:00Z",
+    baseCents: 4000,
+    lateFeeCents: 0,
+    nextIncreaseAt: "2026-12-03T06:00:00Z",
+    status: "open",
+    paidOnlineWhenStaffRecord: true,
   },
 ];
 
@@ -191,6 +208,7 @@ export const MOCK_INPUTS = {
     { q: "ERROR500", state: "MO", note: "500 internal" },
   ],
   amount_changed: [{ q: "FEE2026", state: "MO", note: "late fee lands before payment: 409" }],
+  staff_race: [{ q: "T00050001", note: "paid online as staff record a check: 409 (US3)" }],
 } as const;
 
 /** Gateway polls before a payment reaches its final state. */

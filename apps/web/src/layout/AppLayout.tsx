@@ -23,13 +23,17 @@ export function AppLayout() {
   const mainRef = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
 
+  // Move focus when the user goes to a different address (path or query), e.g. confirming a
+  // near match. Not when a form posts back to the same page: focus must stay in the form so
+  // its errors are next to the cursor and typing isn't lost.
+  const address = location.pathname + location.search;
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
       return;
     }
     mainRef.current?.querySelector<HTMLElement>("h1")?.focus();
-  }, [location.key]);
+  }, [address]);
 
   return (
     <div className="app">

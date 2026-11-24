@@ -52,6 +52,8 @@ describe("sign in", () => {
     expect((await screen.findByRole("alert")).textContent).toContain("don’t match an account");
     expect((screen.getByLabelText("Email") as HTMLInputElement).value).toBe("resident@example.com");
     expect((screen.getByLabelText("Password") as HTMLInputElement).value).toBe("");
+    // A form posting back to its own page must not pull focus away to the heading.
+    expect(document.activeElement).not.toBe(screen.getByRole("heading", { level: 1 }));
   });
 
   it("takes a resident to their account and changes the navigation", async () => {
