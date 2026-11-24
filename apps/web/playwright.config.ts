@@ -24,7 +24,8 @@ export default defineConfig({
   webServer: {
     command: `npx vite build && npx vite preview --port ${PORT} --strictPort`,
     url: `http://localhost:${PORT}`,
-    env: { VITE_USE_MOCKS: "true" },
+    // Same settings as the preview deploy (netlify.toml).
+    env: { VITE_USE_MOCKS: "true", VITE_GATEWAY_URL: "/gateway" },
     reuseExistingServer: !CI,
     timeout: 120_000,
   },

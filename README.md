@@ -67,6 +67,13 @@ paid online, so the staff console won't offer to record a payment for it. To see
 story US3, search `T00050001` in the staff console and record a check: the mock pays it online at
 that moment, as if a resident beat the clerk to it.
 
+## Preview deploy (frontend with mock data)
+
+`netlify.toml` builds `apps/web` with the mock API on, so the whole UI runs as a static site with
+no backend. To set it up once: in Netlify, choose **Add new site → Import an existing project**,
+pick this GitHub repository, and keep the settings it reads from `netlify.toml`. Every push to
+`main` then redeploys. The end-to-end tests run against the same build settings.
+
 ## Scripts
 
 | Command                 | Does                                                                                                               |

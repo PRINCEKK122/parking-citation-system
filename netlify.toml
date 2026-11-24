@@ -1,0 +1,37 @@
+# Preview deploy of the frontend with the in-browser mock API (card S1-16).
+# No backend is involved: every /api and gateway call is answered by the mock service worker.
+
+[build]
+  command = "npm run build --workspace @pcs/web"
+  publish = "apps/web/dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+  VITE_USE_MOCKS = "true"
+  # Same-origin path, so the HTTPS page never calls http://localhost (blocked as mixed content).
+  VITE_GATEWAY_URL = "/gateway"
+
+# Single-page app: serve index.html for every route, so links like /results?q=... work.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# The service worker must never be cached, or an old mock API could outlive a new deploy.
+[[headers]]
+  for = "/mockServiceWorker.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
