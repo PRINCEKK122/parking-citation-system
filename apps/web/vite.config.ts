@@ -1,5 +1,5 @@
 import { loadEnv } from "vite";
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig(({ mode }) => {
@@ -15,6 +15,8 @@ export default defineConfig(({ mode }) => {
     },
     test: {
       environment: "jsdom",
+      // Playwright owns e2e/; Vitest would otherwise pick up its *.spec.ts files.
+      exclude: [...configDefaults.exclude, "e2e/**"],
     },
   };
 });

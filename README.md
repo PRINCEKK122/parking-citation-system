@@ -69,12 +69,13 @@ that moment, as if a resident beat the clerk to it.
 
 ## Scripts
 
-| Command                 | Does                                             |
-| ----------------------- | ------------------------------------------------ |
-| `npm run check`         | Format check, lint, typecheck and tests (as CI)  |
-| `npm run build`         | Builds every workspace                           |
-| `npm test`              | Unit tests in every workspace                    |
-| `npm run format`        | Rewrites files with Prettier                     |
-| `npm run stop:services` | Stops Postgres and Redis (data volumes are kept) |
+| Command                 | Does                                                                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `npm run check`         | Format check, lint, typecheck and tests (as CI)                                                                    |
+| `npm run build`         | Builds every workspace                                                                                             |
+| `npm test`              | Unit tests in every workspace                                                                                      |
+| `npm run e2e`           | Playwright end-to-end tests (T3, T4) on a production build with mocks; first run `npx playwright install chromium` |
+| `npm run format`        | Rewrites files with Prettier                                                                                       |
+| `npm run stop:services` | Stops Postgres and Redis (data volumes are kept)                                                                   |
 
 CI runs the same checks plus the build on every push to `main` and on pull requests.
