@@ -146,8 +146,8 @@ export function createPayment(body: PaymentRequest, idempotencyKey: string) {
   });
 }
 
-export function getPayment(paymentId: string) {
-  return request(`/api/payments/${encodeURIComponent(paymentId)}`, paymentStatusSchema);
+export function getPayment(paymentId: string, signal?: AbortSignal) {
+  return request(`/api/payments/${encodeURIComponent(paymentId)}`, paymentStatusSchema, { signal });
 }
 
 /** Send the card to the gateway, never to our API. Throws `invalid_card` or `expired_card`. */

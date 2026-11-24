@@ -590,3 +590,51 @@ legend + * {
 .test-cards ul {
   padding-left: var(--space-5);
 }
+
+/* ---------- Payment status and receipt ---------- */
+
+.spinner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-weight: 600;
+}
+.spinner::before {
+  content: "";
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 3px solid var(--line);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.receipt-page {
+  display: contents;
+}
+.receipt__id {
+  font-size: var(--text-sm);
+  text-align: right;
+}
+
+@media print {
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .card {
+    box-shadow: none;
+    border-color: #000;
+  }
+}

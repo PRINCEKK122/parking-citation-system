@@ -20,6 +20,21 @@ export function formatDate(iso: string): string {
   return day.format(new Date(iso));
 }
 
+const dateTime = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
+  timeZone: CITY_TIME_ZONE,
+  timeZoneName: "short",
+});
+
+/** "Nov 24, 2026, 11:30 AM CST" */
+export function formatDateTime(iso: string): string {
+  return dateTime.format(new Date(iso));
+}
+
 const dayKey = new Intl.DateTimeFormat("en-CA", { timeZone: CITY_TIME_ZONE }); // YYYY-MM-DD
 
 /** Whole calendar days from `now` until `iso`, counted in the city's time zone. */

@@ -145,7 +145,9 @@ export function CheckoutForm({ citation }: { citation: CitationSummary }) {
         { citationId: citation.id, amountCents: citation.amountCents, payer: values.payer, token },
         idempotencyKey,
       );
-      await navigate(paths.paymentStatus(accepted.paymentId));
+      // Replace checkout in history: Back from the status page goes to the results, not to a
+      // checkout for a citation that is now being paid.
+      await navigate(paths.paymentStatus(accepted.paymentId), { replace: true });
     } catch (e) {
       if (!(e instanceof ApiRequestError)) throw e;
       switch (e.code) {
